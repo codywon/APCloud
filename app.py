@@ -11,6 +11,18 @@ app = Flask(__name__)
 ne = NetEase()
 
 
+@app.route("/apcloud/")
+def hello():
+    return '''<pre>网易云音乐 APlayer
+项目地址: https://github.com/vhyme/APCloud
+
+Usage:
+/歌单ID       显示指定歌单播放器
+/歌曲ID.mp3   重定向到该歌曲最高码率直链,若有版权问题则抛出404
+/歌曲ID.lrc   下载该歌曲歌词
+</pre>'''
+
+
 @app.route("/apcloud/<int:song_id>.lrc")
 def lrc(song_id):
     result = ne.song_lyric(song_id)
