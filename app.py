@@ -63,8 +63,8 @@ def player(playlist_id):
                 album = song["album"]["name"]
                 pic_url = song["album"]["picUrl"]
                 artist = song["artists"][0]["name"]
-                url = '/' + str(song['id']) + '.mp3'
-                lrc = '/' + str(song['id']) + '.lrc'
+                url = str(song['id']) + '.mp3'
+                lrc = str(song['id']) + '.lrc'
             except Exception as e:
                 continue
             songs_info.append(
