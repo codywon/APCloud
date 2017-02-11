@@ -33,10 +33,15 @@ def mp3(song_id):
 def player(playlist_id):
     showlrc = request.args.get("showlrc")
     autoplay = request.args.get("autoplay")
+    max_height = request.args.get("max-height")
     if showlrc is None or showlrc == '1':
         showlrc = '3'  # 使APlayer从指定地址获取歌词
     if autoplay is None:
         autoplay = '1'
+    try:
+        max_height = str(int(max_height)) + 'px'
+    except:
+        max_height = 'none'
 
     if playlist_id is not None:
         playlist = ne.playlist_detail_full(playlist_id)
@@ -58,7 +63,8 @@ def player(playlist_id):
         abort(404)
         return ''
 
-    return render_template("aplayer.html", name=name, songs_info=songs_info, showlrc=showlrc, autoplay=autoplay)
+    return render_template("aplayer.html", name=name, songs_info=songs_info,
+                           showlrc=showlrc, autoplay=autoplay, max_height=max_height)
 
 
 if __name__ == "__main__":

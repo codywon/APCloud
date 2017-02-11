@@ -1,56 +1,42 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <!-- 项目: APCloud 网易云歌单在线播放器 (https://github.com/vhyme/APCloud) -->
-      <!-- 感谢以下开源项目提供轮子 -->
-      <!-- 播放器: APlayer (https://aplayer.js.org/) -->
-      <!-- 网易云音乐接口: musicbox (https://github.com/darknessomi/musicbox) -->
-      <meta charset="UTF-8">
-      <title>APCloud丨{{ name }}</title>
-      <link rel="shortcut icon" href="static/favicon.ico">
-      <style>
-         body {
-         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-         }
-         .container {
-         max-width: 100%;
-         }
-         h1 {
-         font-size: 54px;
-         color: #333;
-         margin: 30px 0 10px;
-         }
-         h2 {
-         font-size: 22px;
-         color: #555;
-         }
-         h3 {
-         font-size: 24px;
-         color: #555;
-         }
-         hr {
-         display: block;
-         width: 7rem;
-         height: 1px;
-         margin: 2.5rem 0;
-         background-color: #eee;
-         border: 0;
-         }
-         a {
-         color: #08c;
-         text-decoration: none;
-         }
-         p {
-         font-size: 18px;
-         }
-      </style>
-   </head>
-   <body>
-      <div class="container">
-         <div id="player" class="aplayer"></div>
-      </div>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.5.8/APlayer.min.js"></script>
-      <script>
+<head>
+    <!-- 项目: APCloud 网易云歌单在线播放器 (https://github.com/vhyme/APCloud) -->
+    <!-- 感谢以下开源项目提供轮子 -->
+    <!-- 播放器: APlayer (https://aplayer.js.org/) -->
+    <!-- 网易云音乐接口: musicbox (https://github.com/darknessomi/musicbox) -->
+    <meta charset="UTF-8">
+    <title>APCloud丨{{ name }}</title>
+    <link rel="shortcut icon" href="static/favicon.ico">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" rel="stylesheet">
+    <style>
+        .aplayer .aplayer-lrc p.aplayer-lrc-current {
+            overflow: visible !important;
+            height: initial !important;
+        }
+        .aplayer-list {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 90px;
+            bottom: 0;
+        }
+        #player.aplayer-list {
+            position: initial;
+        }
+        #player {
+            border-radius: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="player" class="aplayer"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.5.8/APlayer.min.js"></script>
+<script>
          var ap = new APlayer({
              element: document.getElementById('player'),
              narrow: false,
@@ -70,6 +56,10 @@
                  {% endfor %}
              ]
          });
-      </script>
-   </body>
+         ap.audio.addEventListener('error', function() {
+             ap.lrc = '[00:00.00]版权问题，无法播放';
+             ap.setMusic(ap.playIndex + 1);
+         });
+</script>
+</body>
 </html>
