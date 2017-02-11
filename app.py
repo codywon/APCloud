@@ -11,7 +11,7 @@ app = Flask(__name__)
 ne = NetEase()
 
 
-@app.route("/<int:song_id>.lrc")
+@app.route("/apcloud/<int:song_id>.lrc")
 def lrc(song_id):
     result = ne.song_lyric(song_id)
     if result is None:
@@ -19,7 +19,7 @@ def lrc(song_id):
     return result
 
 
-@app.route("/<int:song_id>.mp3")
+@app.route("/apcloud/<int:song_id>.mp3")
 def mp3(song_id):
     url = geturl_new_api({'id': song_id})[0]
     result = redirect(url)
@@ -29,7 +29,7 @@ def mp3(song_id):
         return result
 
 
-@app.route("/<int:playlist_id>")
+@app.route("/apcloud/<int:playlist_id>")
 def player(playlist_id):
     showlrc = request.args.get("showlrc")
     autoplay = request.args.get("autoplay")
