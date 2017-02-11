@@ -18,6 +18,9 @@ def hello():
 
 Usage:
 /歌单ID       显示指定歌单播放器
+    参数:
+    autoplay     是否自动播放(1=true/0=false), 默认是
+    showlrc      是否显示歌词(1=true/0=false), 默认是
 /歌曲ID.mp3   重定向到该歌曲最高码率直链,若有版权问题则抛出404
 /歌曲ID.lrc   下载该歌曲歌词
 </pre>'''
@@ -45,15 +48,10 @@ def mp3(song_id):
 def player(playlist_id):
     showlrc = request.args.get("showlrc")
     autoplay = request.args.get("autoplay")
-    max_height = request.args.get("max-height")
     if showlrc is None or showlrc == '1':
         showlrc = '3'  # 使APlayer从指定地址获取歌词
     if autoplay is None:
         autoplay = '1'
-    try:
-        max_height = str(int(max_height)) + 'px'
-    except:
-        max_height = 'none'
 
     if playlist_id is not None:
         playlist = ne.playlist_detail_full(playlist_id)
@@ -76,7 +74,7 @@ def player(playlist_id):
         return ''
 
     return render_template("aplayer.html", name=name, songs_info=songs_info,
-                           showlrc=showlrc, autoplay=autoplay, max_height=max_height)
+                           showlrc=showlrc, autoplay=autoplay)
 
 
 if __name__ == "__main__":
