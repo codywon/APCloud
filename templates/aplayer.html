@@ -49,9 +49,9 @@
                  {
                      title: '{{ song_info["title"] }}',
                      author: '{{ song_info["artist"] }}',
-                     url: '{{ song_info["url"] }}',
-                     pic: '{{ song_info["pic_url"] }}',
-                     lrc: '{{ song_info["lrc"] }}',
+                     url: '{{ song_info["url"].replace('http://', 'https://') }}',
+                     pic: '{{ song_info["pic_url"].replace('http://', 'https://') }}',
+                     lrc: '{{ song_info["lrc"].replace('http://', 'https://') }}',
                  },
                  {% endfor %}
              ]
