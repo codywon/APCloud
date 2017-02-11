@@ -527,7 +527,7 @@ class NetEase(object):
             return []
 
     def songs_detail_new_api(self, music_ids, bit_rate=320000):
-        action = 'https://music.163.com/weapi/song/enhance/player/url?csrf_token='  # NOQA
+        action = 'http://music.163.com/weapi/song/enhance/player/url?csrf_token='  # NOQA
         self.session.cookies.load()
         data = {'ids': music_ids, 'br': bit_rate, 'csrf_token': ''}
         connection = self.session.post(action,
