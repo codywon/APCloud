@@ -559,7 +559,7 @@ class NetEase(object):
             return result['data']
         except:
             print(connection.text)
-            return {}
+            return ['']
 
     # song id --> song url ( details )
     def song_detail(self, music_id):
