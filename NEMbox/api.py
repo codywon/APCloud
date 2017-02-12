@@ -161,7 +161,6 @@ def geturl(song):
     enc_id = encrypted_id(song_id)
     url = 'http://m%s.music.126.net/%s/%s.mp3' % (random.randrange(1, 3),
                                                   enc_id, song_id)
-    print(url)
     return url, quality
 
 
@@ -553,7 +552,6 @@ class NetEase(object):
         connection = requests.post(action,
                                    data=encrypted_request_new_api(data),
                                    headers=self.header)
-        print(encrypted_request_new_api(data))
         result = json.loads(connection.text)
         return result['data']
 
