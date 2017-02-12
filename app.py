@@ -3,6 +3,8 @@ from flask import Flask, render_template, request, abort, redirect, Response, ur
 import json
 import requests
 import base64
+
+from flask import stream_with_context
 from user_agents import parse
 from werkzeug.contrib.cache import SimpleCache
 from NEMbox.api import NetEase, geturl_new_api
@@ -30,8 +32,8 @@ Usage:
 了APlayer的边距、圆角、外阴影、歌词背景等元素，非常方便嵌入到
 博客中！
 
-注意：目前由于网易接口限制，音乐mp3文件无法通过https传输，会
-导致页面出现 mixed content 问题，没有这方面强迫症的忽略即可。
+注意：mp3通过https传输的问题已经解决，现在mp3文件将通过本服务
+器进行流式转发，若要在你的服务器上部署本项目，请注意流量消耗!
 </pre>'''
 
 
@@ -49,7 +51,12 @@ def mp3(song_id):
     result = redirect(url)
     if result.headers['Location'] == 'None':
         return app.send_static_file('empty.mp3')
-    return result
+
+    def generate():
+        r = requests.get(url, stream=True)
+        yield r.content
+
+    return Response(stream_with_context(generate()), mimetype='audio/mpeg')
 
 
 @app.route("/apcloud/<int:playlist_id>")
@@ -86,4 +93,4 @@ def player(playlist_id):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(threaded=True, debug=True)
