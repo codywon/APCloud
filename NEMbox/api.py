@@ -550,16 +550,12 @@ class NetEase(object):
             },
             'url': 'http://music.163.com/api/song/enhance/player/url'
         }
-        connection = self.session.post(action,
-                                       data=encrypted_request_new_api(data),
-                                       headers=self.header)
+        connection = requests.post(action,
+                                   data=encrypted_request_new_api(data),
+                                   headers=self.header)
         print(connection.text)
         result = json.loads(connection.text)
-        try:
-            return result['data']
-        except:
-            print(connection.text)
-            return ['']
+        return result['data']
 
     # song id --> song url ( details )
     def song_detail(self, music_id):
