@@ -11,58 +11,64 @@
     <link rel="shortcut icon" href="static/favicon.ico">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" rel="stylesheet">
     <style>
-        .aplayer .aplayer-lrc p.aplayer-lrc-current {
-            overflow: visible !important;
-            height: initial !important;
-            min-height: 16px;
-        }
-        .aplayer-list {
-            position: fixed;
-            left: 0;
-            right: 0;
-            top: 66px;
-            bottom: 0;
-            height: auto !important;
-        }
-        #player.aplayer-list {
-            position: initial;
-        }
-        #player {
-            border-radius: 0 !important;
-            margin: 0 !important;
-            box-shadow: none !important;
-        }
-        .aplayer-pic {
-            position: fixed;
-            left: 0;
-            top: 0;
-        }
-        .aplayer-info {
-            position: fixed;
-            left: 0;
-            right: 0;
-            top: 0;
-            border-bottom: none !important
-        }
-        .aplayer-lrc, .aplayer-lrc:before, .aplayer-lrc:after {
-            background: transparent !important;
-        }
-        .aplayer-withlrc.aplayer .aplayer-pic {
-            height: 80px !important;
-            width: 80px !important;
-            margin: 5px;
-            border-radius: 3px;
-        }
-        .aplayer-withlrc .aplayer-list {
-            top: 90px;
-        }
-        .aplayer .aplayer-lrc {
-            text-align: left !important;
-            margin: -10px 6px 7px !important;
-        }
-        .aplayer-withlrc.aplayer .aplayer-info {
-            padding: 10px 7px 0 0 !important;
-        }
+    * {
+        -user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -o-user-select: none;
+    }
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        overflow: visible !important;
+        height: initial !important;
+        min-height: 16px;
+    }
+    .aplayer-list {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 66px;
+        bottom: 0;
+        height: auto !important;
+    }
+    #player.aplayer-list {
+        position: initial;
+    }
+    #player {
+        border-radius: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+    }
+    .aplayer-pic {
+        position: fixed;
+        left: 0;
+        top: 0;
+    }
+    .aplayer-info {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        border-bottom: none !important
+    }
+    .aplayer-lrc, .aplayer-lrc:before, .aplayer-lrc:after {
+        background: transparent !important;
+    }
+    .aplayer-withlrc.aplayer .aplayer-pic {
+        height: 80px !important;
+        width: 80px !important;
+        margin: 5px;
+        border-radius: 3px;
+    }
+    .aplayer-withlrc .aplayer-list {
+        top: 90px;
+    }
+    .aplayer .aplayer-lrc {
+        text-align: left !important;
+        margin: -10px 6px 7px !important;
+    }
+    .aplayer-withlrc.aplayer .aplayer-info {
+        padding: 10px 7px 0 0 !important;
+    }
     </style>
 </head>
 <body>
