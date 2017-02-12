@@ -12,10 +12,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" rel="stylesheet">
     <style>
     * {
-        -user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -o-user-select: none;
+        -user-select: none !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -o-user-select: none !important;
     }
     .aplayer .aplayer-lrc p.aplayer-lrc-current {
         overflow: visible !important;
@@ -71,7 +71,7 @@
     }
     </style>
 </head>
-<body>
+<body onselectstart="return false">
 <div class="container">
     <div id="player" class="aplayer"></div>
 </div>
