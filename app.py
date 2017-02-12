@@ -15,6 +15,7 @@ ne = NetEase()
 def hello():
     return '''<pre>网易云音乐 APlayer
 项目地址: https://github.com/vhyme/APCloud
+演示效果可以看我的博客(电脑打开): https://heya.myseu.cn/
 
 Usage:
 /歌单ID       显示指定歌单播放器
