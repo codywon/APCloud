@@ -40,9 +40,8 @@ def mp3(song_id):
     url = geturl_new_api({'id': song_id})[0]
     result = redirect(url)
     if result.headers['Location'] == 'None':
-        abort(404)
-    else:
-        return result
+        result = redirect('/apcloud/static/empty.mp3')
+    return result
 
 
 @app.route("/apcloud/<int:playlist_id>")
