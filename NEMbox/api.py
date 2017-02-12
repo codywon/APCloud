@@ -555,7 +555,11 @@ class NetEase(object):
                                        headers=self.header)
         print(connection.text)
         result = json.loads(connection.text)
-        return result['data']
+        try:
+            return result['data']
+        except:
+            print(connection.text)
+            return {}
 
     # song id --> song url ( details )
     def song_detail(self, music_id):
