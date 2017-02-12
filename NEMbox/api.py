@@ -110,7 +110,7 @@ def encrypted_request_new_api(text):
     pad = 16 - len(body) % 16
     body += chr(pad) * pad
     body = AES.new(binascii.a2b_hex(key)).encrypt(body)
-    body = str(binascii.b2a_hex(body)).upper()
+    body = binascii.b2a_hex(body)
     data = {'eparams': body}
     return data
 
@@ -553,7 +553,7 @@ class NetEase(object):
         connection = requests.post(action,
                                    data=encrypted_request_new_api(data),
                                    headers=self.header)
-        print(connection.text)
+        print(encrypted_request_new_api(data))
         result = json.loads(connection.text)
         return result['data']
 
