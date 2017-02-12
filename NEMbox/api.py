@@ -102,6 +102,18 @@ def encrypted_request(text):
     data = {'params': encText, 'encSecKey': encSecKey}
     return data
 
+# 获取音乐直链请求的最新加密算法
+# 参考https://github.com/metowolf/Meting/blob/master/Meting.php :654
+def encrypted_request_new_api(text):
+    key = '7246674226682325323F5E6544673A51'
+    body = json.dumps(text)
+    pad = 16 - len(body) % 16
+    body += chr(pad) * pad
+    body = AES.new(binascii.a2b_hex(key)).encrypt(body)
+    body = str(binascii.b2a_hex(body)).upper()
+    data = {'eparams': body}
+    return data
+
 
 def aesEncrypt(text, secKey):
     pad = 16 - len(text) % 16
@@ -526,13 +538,22 @@ class NetEase(object):
             log.error(e)
             return []
 
+    # 获取音乐直链的最新请求api
+    # 参考https://github.com/metowolf/Meting/blob/master/Meting.php :523
     def songs_detail_new_api(self, music_ids, bit_rate=320000):
-        action = 'http://music.163.com/weapi/song/enhance/player/url?csrf_token='  # NOQA
-        self.session.cookies.load()
-        data = {'ids': music_ids, 'br': bit_rate, 'csrf_token': ''}
+        action = 'http://music.163.com/api/linux/forward'  # NOQA
+        data = {
+            'method': 'POST',
+            'params': {
+                'ids': music_ids,
+                'br': bit_rate
+            },
+            'url': 'http://music.163.com/api/song/enhance/player/url'
+        }
         connection = self.session.post(action,
-                                       data=encrypted_request(data),
-                                       headers=self.header, )
+                                       data=encrypted_request_new_api(data),
+                                       headers=self.header)
+        print(connection.text)
         result = json.loads(connection.text)
         return result['data']
 

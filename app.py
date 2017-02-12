@@ -31,9 +31,6 @@ Usage:
 全局滚动条，而是使用APlayer自带的列表滚动条，另外本播放器隐藏
 了APlayer的边距、圆角、外阴影、歌词背景等元素，非常方便嵌入到
 博客中！
-
-注意：mp3通过https传输的问题已经解决，现在mp3文件将通过本服务
-器进行流式转发，若要在你的服务器上部署本项目，请注意流量消耗!
 </pre>'''
 
 
@@ -48,15 +45,17 @@ def lrc(song_id):
 @app.route("/apcloud/<int:song_id>.mp3")
 def mp3(song_id):
     url = geturl_new_api({'id': song_id})[0]
-    result = redirect(url)
+    result = redirect(url.replace('http://', 'https://'))
     if result.headers['Location'] == 'None':
         return app.send_static_file('empty.mp3')
 
-    def generate():
-        r = requests.get(url, stream=True)
-        yield r.content
-
-    return Response(stream_with_context(generate()), mimetype='audio/mpeg')
+    # 如果拿到的url不能https,用以下方法通过服务器转发https
+    # def generate():
+    #     r = requests.get(url, stream=True)
+    #     yield r.content
+    #
+    # return Response(stream_with_context(generate()), mimetype='audio/mpeg')
+    return result
 
 
 @app.route("/apcloud/<int:playlist_id>")
