@@ -164,6 +164,14 @@ def geturl(song):
     return url, quality
 
 
+def geturl_new_new_api(song):
+    br_to_quality = {128000: 'MD 128k', 320000: 'HD 320k'}
+    alter = NetEase().songs_detail_new_new_api([song['id']])[0]
+    url = alter['url']
+    quality = br_to_quality.get(alter['br'], '')
+    return url, quality
+
+
 def geturl_new_api(song):
     br_to_quality = {128000: 'MD 128k', 320000: 'HD 320k'}
     alter = NetEase().songs_detail_new_api([song['id']])[0]
@@ -537,9 +545,19 @@ class NetEase(object):
             log.error(e)
             return []
 
-    # 获取音乐直链的最新请求api
-    # 参考https://github.com/metowolf/Meting/blob/master/Meting.php :523
     def songs_detail_new_api(self, music_ids, bit_rate=320000):
+        action = 'http://music.163.com/weapi/song/enhance/player/url'  # NOQA
+        self.session.cookies.load()
+        data = {'ids': music_ids, 'br': bit_rate, 'csrf_token': ''}
+        connection = self.session.post(action,
+                                       data=encrypted_request(data),
+                                       headers=self.header, )
+        result = json.loads(connection.text)
+        return result['data']
+
+    # 获取音乐直链的最新请求api, 某些网络会挂
+    # 参考https://github.com/metowolf/Meting/blob/master/Meting.php :523
+    def songs_detail_new_new_api(self, music_ids, bit_rate=320000):
         action = 'http://music.163.com/api/linux/forward'  # NOQA
         data = {
             'method': 'POST',

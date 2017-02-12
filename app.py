@@ -31,6 +31,9 @@ Usage:
 全局滚动条，而是使用APlayer自带的列表滚动条，另外本播放器隐藏
 了APlayer的边距、圆角、外阴影、歌词背景等元素，非常方便嵌入到
 博客中！
+
+注意：mp3通过https传输的问题已经解决，现在mp3文件将通过本服务
+器进行流式转发，若要在你的服务器上部署本项目，请注意流量消耗!
 </pre>'''
 
 
@@ -42,6 +45,7 @@ def lrc(song_id):
     return result
 
 
+# 服务器转发方案, 会把任何mp3文件通过服务器流量走一遍, 只要服务器能连上mp3, 就可以用, 但是注意服务器流量
 @app.route("/apcloud/<int:song_id>.mp3")
 def mp3(song_id):
     url = geturl_new_api({'id': song_id})[0]
@@ -49,13 +53,27 @@ def mp3(song_id):
     if result.headers['Location'] == 'None':
         return app.send_static_file('empty.mp3')
 
-    # 如果拿到的url不能https,用以下方法通过服务器转发https
-    # def generate():
-    #     r = requests.get(url, stream=True)
-    #     yield r.content
-    #
-    # return Response(stream_with_context(generate()), mimetype='audio/mpeg')
-    return result
+    def generate():
+        r = requests.get(url, stream=True)
+        yield r.content
+
+    return Response(stream_with_context(generate()), mimetype='audio/mpeg')
+
+
+# 备用方案, 把地址传给网页(强制https), 网页自动选择cdn, 由于某些cdn不支持https, 这种方案在某些网络下会挂
+# @app.route("/apcloud/<int:song_id>.mp3")
+# def mp3(song_id):
+#     url = geturl_new_new_api({'id': song_id})[0]
+#     result = redirect(url.replace('http://', 'https://'))
+#     if result.headers['Location'] == 'None':
+#         return app.send_static_file('empty.mp3')
+#
+#     def generate():
+#         r = requests.get(url, stream=True)
+#         yield r.content
+#
+#     return Response(stream_with_context(generate()), mimetype='audio/mpeg')
+#     # return result
 
 
 @app.route("/apcloud/<int:playlist_id>")
