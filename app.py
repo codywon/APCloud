@@ -48,7 +48,7 @@ def lrc(song_id):
 @app.route("/apcloud/<int:song_id>.mp3")
 def mp3(song_id):
     url = geturl_new_api({'id': song_id})[0]
-    result = redirect(url.replace('http://', 'https://'))
+    result = redirect(url)
     if result.headers['Location'] == 'None':
         print('Failed: ', url)
         return app.send_static_file('empty.mp3')
