@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, abort, redirect, Response, ur
 import json
 import requests
 import base64
+import re
 
 from flask import stream_with_context
 from user_agents import parse
@@ -39,6 +40,9 @@ def lrc(song_id):
     result = ne.song_lyric(song_id)
     if result is None:
         return '[00:00.00]歌曲无歌词'
+
+    # 去掉日文歌词的注音
+    result = re.sub(u'[(（][\u2E80-\u4DFF]+[)）]', '', result)
     return result
 
 
