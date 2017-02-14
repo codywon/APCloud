@@ -45,20 +45,21 @@ def lrc(song_id):
     return result
 
 
-# 服务器转发方案, 会把任何mp3文件通过服务器流量走一遍, 只要服务器能连上mp3, 就可以用, 但是注意服务器流量
 @app.route("/apcloud/<int:song_id>.mp3")
 def mp3(song_id):
     url = geturl_new_api({'id': song_id})[0]
     result = redirect(url.replace('http://', 'https://'))
     if result.headers['Location'] == 'None':
+        print('Failed: ', url)
         return app.send_static_file('empty.mp3')
 
-    def generate():
-        r = requests.get(url, stream=True)
-        yield r.content
-
-    return Response(stream_with_context(generate()), mimetype='audio/mpeg')
-
+    # print('Transfer: ', url)
+    # def generate():
+    #     r = requests.get(url, stream=True)
+    #     yield r.content
+    #
+    # return Response(stream_with_context(generate()), mimetype='audio/mpeg')
+    return result
 
 # 备用方案, 把地址传给网页(强制https), 网页自动选择cdn, 由于某些cdn不支持https, 这种方案在某些网络下会挂
 # @app.route("/apcloud/<int:song_id>.mp3")

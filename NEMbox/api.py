@@ -111,7 +111,7 @@ def encrypted_request_new_api(text):
     body += chr(pad) * pad
     body = AES.new(binascii.a2b_hex(key)).encrypt(body)
     body = binascii.b2a_hex(body)
-    data = {'eparams': body}
+    data = {'params': body}
     return data
 
 
@@ -164,18 +164,12 @@ def geturl(song):
     return url, quality
 
 
-def geturl_new_new_api(song):
-    br_to_quality = {128000: 'MD 128k', 320000: 'HD 320k'}
-    alter = NetEase().songs_detail_new_new_api([song['id']])[0]
-    url = alter['url']
-    quality = br_to_quality.get(alter['br'], '')
-    return url, quality
-
-
 def geturl_new_api(song):
     br_to_quality = {128000: 'MD 128k', 320000: 'HD 320k'}
     alter = NetEase().songs_detail_new_api([song['id']])[0]
     url = alter['url']
+    if url is None:
+        print('Cannot get url: ', alter)
     quality = br_to_quality.get(alter['br'], '')
     return url, quality
 
@@ -555,24 +549,6 @@ class NetEase(object):
         result = json.loads(connection.text)
         return result['data']
 
-    # 获取音乐直链的最新请求api, 某些网络会挂
-    # 参考https://github.com/metowolf/Meting/blob/master/Meting.php :523
-    def songs_detail_new_new_api(self, music_ids, bit_rate=320000):
-        action = 'http://music.163.com/api/linux/forward'  # NOQA
-        data = {
-            'method': 'POST',
-            'params': {
-                'ids': music_ids,
-                'br': bit_rate
-            },
-            'url': 'http://music.163.com/api/song/enhance/player/url'
-        }
-        connection = requests.post(action,
-                                   data=encrypted_request_new_api(data),
-                                   headers=self.header)
-        result = json.loads(connection.text)
-        return result['data']
-
     # song id --> song url ( details )
     def song_detail(self, music_id):
         action = 'http://music.163.com/api/song/detail/?id={}&ids=[{}]'.format(
@@ -746,3 +722,34 @@ class NetEase(object):
             temp = self.playlist_class_dict[data]
 
         return temp
+
+
+def str_decode(src):
+    b = base64.b64decode(src.encode('utf-8'))
+    i = 0
+    c = ''
+    for byte in b.encode('ascii'):
+        c += chr(int.from_bytes([byte]) ^ int.from_bytes(['Encrypt'.encode('ascii')[i]]))
+        i = (i + 1) % 7
+    return c
+
+
+def str_encode(src):
+    i = 0
+    c = ''
+    for byte in src.encode('ascii'):
+        c += chr(int.from_bytes([byte]) ^ int.from_bytes(['Encrypt'.encode('ascii')[i]]))
+        i = (i + 1) % 7
+    return base64.b64encode(c).decode('utf-8')
+
+
+if __name__ == '__main__':
+    print(str_encode('/api/song/enhance/player/url/'))
+    print(str_encode('/api/song/enhance/player/url'))
+    print(str_encode('/api/song/enhance/player'))
+    print(str_encode('/song/enhance'))
+    print(str_encode('/song'))
+    print(str_encode('song/enhance'))
+    print(str_encode('params'))
+    print(str_encode('params='))
+    print(str_decode('NQ8RExQDPyAX'))
