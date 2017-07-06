@@ -39,7 +39,7 @@ Usage:
 def lrc(song_id):
     result = ne.song_lyric(song_id)
     if result is None or result == '未找到歌词':
-        return '[999:99.99]纯音乐'
+        return '[00:00.00]纯音乐'
 
     # 去掉日文歌词的注音
     result = re.sub(u'[(（][\u2E80-\u4DFF]+[)）]', '', result)
